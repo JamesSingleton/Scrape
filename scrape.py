@@ -1,6 +1,6 @@
 import requests
 
-response = requests.get("https://www.apartments.com/promenade-towers-los-angeles-ca/1ppnmg4/")
+response = requests.get("your url here")
 
 txt = response.text
 

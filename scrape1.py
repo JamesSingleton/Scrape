@@ -14,13 +14,14 @@ for state in config.states:
         newPages = pages.get('data-page',0)
         intPages = int(newPages)
     #Grabbing the information per page within that state page
+    community_url = [] #Setting community url array
     for i in range(intPages+1):
         try:
             target_url = "{}{}".format(state_url, i)
             r = requests.get(target_url)
             soupTarget = BeautifulSoup(r.content, 'html.parser')
             g_data = soupTarget.find_all("article", {"class": "placard"})
-            community_url = []
+
             #looping through each item on the page to grab name and location
             for item in g_data:
                 try:

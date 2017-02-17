@@ -1,27 +1,27 @@
-import requests
+import requests, config
 from bs4 import BeautifulSoup
-from config import *
+from pprint import pprint
 
-#states = ['CA']
-
-for state in states:
-    state_url = base_url+"{}".format(state)+"/"
+#looping through each state page
+for state in config.states:
+    state_url = "{}{}/".format(config.base_url, state)
     print (state_url)
     ar = requests.get(state_url)
     soupBase = BeautifulSoup(ar.content, 'html.parser')
     pagination = soupBase.find_all("div", {"class": "paging"})
     for number in pagination:
         pages = number.find_all("a")[6]
-        newPages = pages.get("data-page")
+        newPages = pages.get('data-page',0)
         intPages = int(newPages)
-    #print (intPages)
+    #Grabbing the information per page within that state page
     for i in range(intPages+1):
         try:
-            target_url =state_url+"{}".format(i)
+            target_url = "{}{}".format(state_url, i)
             r = requests.get(target_url)
             soupTarget = BeautifulSoup(r.content, 'html.parser')
             g_data = soupTarget.find_all("article", {"class": "placard"})
             community_url = []
+            #looping through each item on the page to grab name and location
             for item in g_data:
                 try:
                     print (item.find_all("a", {"class": "placardTitle"})[0].text)
@@ -33,5 +33,5 @@ for state in states:
                     pass
         except:
             pass
-print (community_url)
+pprint(community_url)
 print('done!')
